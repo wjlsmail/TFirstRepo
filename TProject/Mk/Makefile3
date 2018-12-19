@@ -1,0 +1,27 @@
+cc=g++ 
+prog=bin/GetRemoteDb
+deps=$(shell find ./ -name "*.h") 
+src=$(shell find ./ -name "*.cpp") 
+obj=$(src:%.cpp=%.o) 
+stdflag=-std=c++0x  
+inc_path= -I/home/vagrant/work/external/curl/include -I/home/vagrant/work/external/boost/include 
+lib_path= -L/home/vagrant/work/external/curl/lib -L/home/vagrant/work/external/boost/lib.linux_x64 
+link= -lcurl -lboost_system -lboost_filesystem 
+
+
+$(prog):$(obj)
+	@echo "start link" $(prom) "......"
+	@echo $(cc) $(obj) $(stdflag) $(inc_path) $(lib_path) $(link) -o $(prog) 
+	@$(cc) $(obj) $(stdflag) $(inc_path) $(lib_path) $(link) -o $(prog) 
+
+%.o:%.cpp $(deps)
+	@echo "start compile" $(prom) "......"
+	@echo $(cc) $(stdflag) $(inc_path) -c $< -o $@
+	@$(cc) $(stdflag) $(inc_path) -c $< -o $@
+
+.PHONY : clean
+clean:
+	@echo "start clean......"
+	@echo rm -rf $(obj) $(prog)
+	@rm -rf $(obj) $(prog)
+

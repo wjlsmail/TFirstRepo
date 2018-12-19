@@ -1,0 +1,71 @@
+cc=g++ 
+prog=FilePretreater 
+deps=$(shell find ./ -name "*.h") 
+src=$(shell find ./ -name "*.cpp") 
+obj=$(src:%.cpp=%.o) 
+stdflag=-std=c++0x  
+inc_path= -I/home/vagrant/work/external/curl/include -I/home/vagrant/work/external/boost/include 
+lib_path= -L/home/vagrant/work/external/curl/lib -L/home/vagrant/work/external/boost/lib.linux_x64 
+link= -lcurl -lboost_system -lboost_filesystem 
+
+$(info ---------------------------------------------------------------------)
+$(info info : shwo infomation and values; waring: show waring with line NO., error: show error infomation and stop Make)
+$(info value: $(deps))
+$(info ---- Makefile edit order: generate rules fisrt, then tag)
+$(info ---- @g++ ... -I... -L... -l..., cmd with header "@" will not be showed)
+$(warning warning: here add the debug warning)
+#$(error error: this will stop the compile)
+$(info ---------------------------------------------------------------------)
+
+$(prog):$(obj)
+	@echo "start link" $(prom) "......"
+	@echo $(cc) $(obj) $(stdflag) $(inc_path) $(lib_path) $(link) -o $(prog) 
+	@$(cc) $(obj) $(stdflag) $(inc_path) $(lib_path) $(link) -o $(prog) 
+
+%.o:%.cpp $(deps)
+	@echo "start compile" $(prom) "......"
+	@echo $(cc) $(stdflag) $(inc_path) -c $< -o $@
+	@$(cc) $(stdflag) $(inc_path) -c $< -o $@
+
+.PHONY : clean
+clean:
+	@echo "start clean......"
+	@echo rm -rf $(obj) $(prog)
+	@rm -rf $(obj) $(prog)
+
+.PHONY : showvalue
+showvalue:
+	@echo " "
+	@echo " "
+	@echo "@echo must in tag and after tab!"
+	@echo "---------------------------------------------"
+	@echo "[cc] value is:["$(cc)"]"
+	@echo "[prog] value is:["$(prog)"]"
+	@echo "[deps] value is:["$(deps)"]"
+	@echo "[src] value is:["$(src)"]"
+	@echo "[obj] value is:["$(obj)"]"
+	@echo "[stdflag] value is:["$(stdflag)"]"
+	@echo "[inc_path] value is:["$(inc_path)"]"
+	@echo "[lib_path] value is:["$(lib_path)"]"
+	@echo "[link] value is:["$(link)"]"
+	@echo "---------------------------------------------"
+	@echo "values show end."
+	@echo " "
+	@echo " "
+
+.PHONY : showcmd
+showcmd:
+	@echo " "
+	@echo " "
+	@echo "---------------------------------------------"
+	@echo "---- generate " $(prog) "will do："
+	@echo $(cc) $(obj) $(stdflag) $(inc_path) $(lib_path) $(link) -o $(prog) 
+	@echo "---- generate " $(obj) "will do："
+	@echo $(cc) $(stdflag) $(inc_path) -c $(src) -o $(obj)
+	@echo "---- clean: will do："
+	@echo rm -rf $(obj) $(prog)
+	@echo "---------------------------------------------"
+	@echo "cmd show end."
+	@echo " "
+	@echo " "
+
